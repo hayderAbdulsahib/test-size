@@ -1,0 +1,47 @@
+
+h1 {
+    color: red;
+}
+
+.main-div {
+    margin-bottom: 100px;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: space-evenly;
+    align-items: center;
+}
+.cards-container img {
+    height: 180px;
+    width: 150px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+}
+
+@media all and (max-width: 1100px) {
+    .main-div {
+        margin-bottom: 80px;
+    }
+
+    .cards-container img {
+        height: 140px;
+        width: 100px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+}
+
+@media all and (max-width: 600px) {
+    .main-div {
+        margin-bottom: 80px;
+    }
+
+    .cards-container img {
+        height: 100px;
+        width: 60px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+}
