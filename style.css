@@ -3,7 +3,7 @@ h1 {
     color: red;
 }
 
-.main-div {
+.player-state {
     margin-bottom: 100px;
 }
 
@@ -21,7 +21,7 @@ h1 {
 }
 
 @media all and (max-width: 1100px) {
-    .main-div {
+    .player-state {
         margin-bottom: 80px;
     }
 
@@ -34,7 +34,7 @@ h1 {
 }
 
 @media all and (max-width: 600px) {
-    .main-div {
+    .player-state {
         margin-bottom: 80px;
     }
 
