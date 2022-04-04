@@ -8,22 +8,51 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="player-state"></div>
+    <div class="home-page">
+      <h1 class="home__title">Memory card game</h1>
+      <p class="home__paragraph">
+        programming can be tough, and it is filled with bugs, so you need a
+        clear mind to be able to do your job, so if you feel that your stuck,
+        come and play the game to clear mind.
+      </p>
+      <button class="home__play-btn">play game</button>
+      <button class="home__scores-btn">Your Scores</button>
+    </div>
 
-    <div class="cards-container">
-      <img src="./angular.png" />
-      <img src="./express.jpg" />
-      <img src="./javascript.png" />
-      <img src="./jquery.png" />
-      <img src="./react.jpeg" />
-      <img src="./vue.jpg" />
+    <div class="playing-page">
+      <div class="player-state"></div>
 
-      <img src="./angular.png" />
-      <img src="./express.jpg" />
-      <img src="./javascript.png" />
-      <img src="./jquery.png" />
-      <img src="./react.jpeg" />
-      <img src="./vue.jpg" />
+      <div class="cards-container">
+        <img src="./angular.png" />
+        <img src="./express.jpg" />
+        <img src="./javascript.png" />
+        <img src="./jquery.png" />
+        <img src="./react.jpeg" />
+        <img src="./vue.jpg" />
+
+        <img src="./angular.png" />
+        <img src="./express.jpg" />
+        <img src="./javascript.png" />
+        <img src="./jquery.png" />
+        <img src="./react.jpeg" />
+        <img src="./vue.jpg" />
+      </div>
+    </div>
+
+    <div class="score-page">
+      <h1 class="score__current-score">your current score is</h1>
+      <button class="score__play-again-btn">play Again</button>
+    </div>
+
+    <div class="previous-score-list">
+      <div class="previous-score-list__first-time">
+        <h1>you don't have any scores yet please play a game first</h1>
+        <button>Go Back To Play</button>
+      </div>
+      <div class="previous-score-list__played-before">
+        <!-- <h1>your score</h1> -->
+        <!-- <button>play Again</button> -->
+      </div>
     </div>
 
     <!-- we must always put our script tag for the connection to the js page at the

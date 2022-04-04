@@ -1,4 +1,4 @@
-const cards = [
+const originalCard = [
   {
     id: 1,
     name: "Angular",
@@ -51,27 +51,85 @@ const cards = [
 
 const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
 
-// if (true) shuffleArray(cards);
+// const cards = originalCard;
+const cards = shuffleArray(originalCard);
 
-const scoreH3 = document.createElement("h3");
-scoreH3.innerText = 0;
-
+const scoreH3 = document.createElement("h1");
+scoreH3.innerText = "score: 0";
+scoreH3.className = "score";
 const playerDiv = document.querySelector(".player-state");
-
 playerDiv.append(scoreH3);
+
+let startingGameTimer = 8;
+const timerH1 = document.createElement("h1");
+timerH1.innerText = `time left to start the game: ${startingGameTimer}`;
+timerH1.className = "starting-timer";
+playerDiv.append(timerH1);
+
+const playPageDiv = document.querySelector(".playing-page");
+
+const scorePage = document.querySelector(".score-page");
+
+const startGame = () => {
+  const homeDiv = document.querySelector(".home-page");
+  homeDiv.style.display = "none";
+
+  playPageDiv.style.display = "block";
+
+  const setIntervalId = setInterval(() => {
+    startingGameTimer--;
+    timerH1.innerText = `time left to start the game: ${startingGameTimer}`;
+  }, 1000);
+
+  setTimeout(() => {
+    clearInterval(setIntervalId);
+    renderCards();
+
+    ///////////////////////////////////////
+    if (startingGameTimer === 0) {
+      timerH1.style.display = "none";
+      let finishingGameTimer = 20;
+      const finishGameTimerH1 = document.createElement("h1");
+      finishGameTimerH1.innerText = `time left to finish the game: ${finishingGameTimer}`;
+      finishGameTimerH1.className = "finish-timer";
+      playerDiv.append(finishGameTimerH1);
+
+      const setIntervalFinishId = setInterval(() => {
+        finishingGameTimer--;
+        finishGameTimerH1.innerText = `time left to finish the game: ${finishingGameTimer}`;
+      }, 1000);
+
+      setTimeout(() => {
+        clearInterval(setIntervalFinishId);
+        if (finishingGameTimer === 0) {
+          playPageDiv.style.display = "none";
+          scorePage.style.display = "block";
+          scoreList();
+        }
+      }, 20400); //we add 400 millisecond because in the code under we determine that it will take 300 millisecond to check the card so in the case in the last second the user manage to make a score it will be counted
+
+      //the end of the condition
+    }
+
+    ////////////////////////////////////////
+  }, 8000);
+};
+
+const playBtn = document.querySelector(".home__play-btn");
+playBtn.addEventListener("click", startGame);
 
 const cardsDiv = document.querySelector(".cards-container");
 
-let idOfVisibleCard = [];
+let visibleCards = [];
+let idOfVisibleCards = [];
 let score = 0;
 
 const renderCards = () => {
-  //   const matchCard = cards.filter((element) => element.isVisible === true);
-
-  if (score === 25) {
-    const won = document.createElement("h1");
-    won.innerText = "You Won";
-    playerDiv.append(won);
+  if (score === 30) {
+    clearInterval(3);
+    playPageDiv.style.display = "none";
+    scorePage.style.display = "block";
+    scoreList();
   }
 
   cardsDiv.innerText = "";
@@ -95,58 +153,157 @@ const renderCards = () => {
       });
     }
   });
-
-  //   if (idOfVisibleCard.length === 2) {
-  //     checkCards();
-  //   }
 };
-
-// // how to make the card filp after the first timer reaches zero
-// setTimeout(() => {
-//   renderCards();
-// }, 1000);
-
-renderCards();
 
 const showCard = (image, index) => {
   cards[index].isVisible = true;
-  idOfVisibleCard.push(image);
+  visibleCards.push(image);
+  idOfVisibleCards.push(index);
+
   image.isVisible = true;
-  if (idOfVisibleCard.length === 2) {
-    // checkCards();
+  if (visibleCards.length === 2) {
+    // checkCards(cards[index]);
     setTimeout(() => {
-      checkCards();
-    }, 300);
+      checkCards(cards[index]);
+    }, 250);
   }
   renderCards();
 };
 
 const checkCards = () => {
-  if (idOfVisibleCard[0].name !== idOfVisibleCard[1].name) {
-    cards[idOfVisibleCard[0].id - 1].isVisible = false;
-    cards[idOfVisibleCard[1].id - 1].isVisible = false;
-    idOfVisibleCard = [];
+  if (visibleCards[0].name !== visibleCards[1].name) {
+    cards[idOfVisibleCards[0]].isVisible = false;
+    cards[idOfVisibleCards[1]].isVisible = false;
+    visibleCards = [];
+    idOfVisibleCards = [];
   } else {
-    cards[idOfVisibleCard[0].id - 1].opacity = 0.1;
-    cards[idOfVisibleCard[1].id - 1].opacity = 0.1;
-    idOfVisibleCard = [];
+    cards[idOfVisibleCards[0]].opacity = 0.2;
+    cards[idOfVisibleCards[1]].opacity = 0.2;
+    visibleCards = [];
+    idOfVisibleCards = [];
     score += 5;
-    scoreH3.innerText = score;
+    if (score === 25) {
+      score = 30;
+    }
+    scoreH3.innerText = `your score: ${score}`;
   }
   renderCards();
 };
 
-// const checkCards = () => {
-//   if (idOfVisibleCard[0].name !== idOfVisibleCard[1].name) {
-//     cards[idOfVisibleCard[0].id - 1].isVisible = false;
-//     cards[idOfVisibleCard[1].id - 1].isVisible = false;
-//     idOfVisibleCard = [];
-//   } else {
-//     cards[idOfVisibleCard[0].id - 1].opacity = 0.1;
-//     cards[idOfVisibleCard[1].id - 1].opacity = 0.1;
+const scoreList = () => {
+  const currentScore = document.querySelector(".score__current-score");
+  currentScore.innerText = `Your Score For This Game Is ${score}`;
 
-//     idOfVisibleCard = [];
-//     score += 5;
-//     scoreH3.innerText = score;
-//   }
-// };
+  const playAgainBtn = document.querySelector(".score__play-again-btn");
+  playAgainBtn.style.display = "none";
+
+  // playAgainBtn.addEventListener("click", () => {
+  //   window.location.reload();
+  // });
+
+  // invoking the localstorage function
+  pervoiusScores();
+};
+
+const pervoiusScores = () => {
+  if (localStorage.getItem("pervoiusScores") === null) {
+    localStorage.setItem("pervoiusScores", [score]);
+    //todo invoke the display prevous scores list function
+    displayPreviousScores();
+    return;
+  } else {
+    const storedScores = localStorage.getItem("pervoiusScores");
+    const scoresArray = storedScores.split(",");
+    const scoresNumbersArray = scoresArray.map((number) => +number); //this is called the unary + operator and it is used to convert string to numbers
+
+    // score = 7;
+    // const scoresNumbersArray = [5, 6, 8];
+
+    if (scoresNumbersArray.length < 5) {
+      scoresNumbersArray.push(score);
+      const sortArray = scoresNumbersArray.sort((a, b) => b - a);
+      localStorage.setItem("pervoiusScores", sortArray);
+      // make a return while to get out of the function before continuing the code under
+      displayPreviousScores();
+      return;
+    }
+
+    const orderingArray = (array) => {
+      const sortArrayAsce = array.sort((a, b) => a - b);
+
+      sortArrayAsce[0] = score;
+
+      const sortArrayDesc = sortArrayAsce.sort((a, b) => b - a);
+      return sortArrayDesc;
+    };
+    const sortArray = orderingArray(scoresNumbersArray);
+
+    localStorage.setItem("pervoiusScores", sortArray);
+
+    displayPreviousScores();
+  }
+};
+
+//localStorage.setItem('pervoiusScores', '0');
+const displayPreviousScores = () => {
+  const homePageDiv = document.querySelector(".home-page");
+  homePageDiv.style.display = "none";
+
+  const pervoiusScoresDiv = document.querySelector(".previous-score-list");
+
+  // pervoiusScoresDiv.style.display = "block";
+  pervoiusScoresDiv.style = "display: grid;place-items: center;";
+
+  const pervoiusScoresList = localStorage.getItem("pervoiusScores");
+
+  if (pervoiusScoresList === null) {
+    const firstTimeDiv = document.querySelector(
+      ".previous-score-list__first-time"
+    );
+
+    // firstTimeDiv.style.display = "block";
+    firstTimeDiv.style = " display: grid; place-items: center; ";
+
+    const goBackBtn = document.querySelector(
+      ".previous-score-list__first-time button"
+    );
+
+    goBackBtn.addEventListener("click", () => {
+      window.location.reload();
+    });
+
+    return;
+  }
+
+  const playedBeforeDiv = document.querySelector(
+    ".previous-score-list__played-before"
+  );
+
+  // playedBeforeDiv.style.display = "block";
+  playedBeforeDiv.style = "display: grid;";
+
+  const topFiveH1 = document.createElement("h1");
+  topFiveH1.innerText = "Your Top Five Scores";
+  playedBeforeDiv.append(topFiveH1);
+
+  const scoresArray = pervoiusScoresList.split(",");
+
+  scoresArray.forEach((element) => {
+    const h1 = document.createElement("h1");
+    h1.innerText = `Score: ${element}`;
+    playedBeforeDiv.append(h1);
+
+    h1.style = "color: yellow;";
+  });
+
+  const playAgainBtn = document.createElement("button");
+  playAgainBtn.innerText = "Play Again";
+  playedBeforeDiv.append(playAgainBtn);
+
+  playAgainBtn.addEventListener("click", () => {
+    window.location.reload();
+  });
+};
+
+const pervoiusScoresBtn = document.querySelector(".home__scores-btn");
+pervoiusScoresBtn.addEventListener("click", displayPreviousScores);
